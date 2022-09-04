@@ -1,15 +1,28 @@
-from ctypes import cdll
-import os
+import ctypes
+import threading
 
-os.add_dll_directory(os.path.dirname(__file__))
+# nsl-kdd dll 불러오기
+nslkdd = ctypes.cdll.LoadLibrary("./DLL20220722.dll")
+# 데이터 변환 결과값 형식 지정
+nslkdd.rt_output.restype = ctypes.c_char_p
 
-dirpath = os.path.dirname(__file__) + "\DLL20220722.dll"
-# pt = cdll.LoadLibrary(dirpath)
-pt = cdll.LoadLibrary("./DLL20220722.dll")
-pt.Test()
-os.system("pause")
 
-# 임시로 만들어진 프로그램
-# 받아오는 패킷에서 nsl-kdd 특징 중 1~9번, 23번부터 41번까지 총 28개의 특징을 추출
-# Ctrl + C로 프로그램 종료
-# 생성되는 파일은 txt 형식
+class DataReceiver(threading.Thread):
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        print("nsl-kdd data receiver start")
+        while True:
+            if nslkdd.output_status():
+                print(f"반환된 데이터\n{nslkdd.rt_output()}")
+                nslkdd.output_false()
+
+
+class PacketCapture(threading.Thread):
+    def __init__(self, dev_name):
+        super().__init__()
+        self.dev_name = dev_name
+
+    def run(self):
+        nslkdd.Test(self.dev_name)
