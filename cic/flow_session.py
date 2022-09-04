@@ -18,12 +18,13 @@ class FlowSession(DefaultSession):
     def __init__(self, *args, **kwargs):
 
         ##############################
-        while True:
-            self.data_type = input("데이터 형식\n1. cse-cic-ids2018\n2. 명섭\n3. 재희\n")
-            if (self.data_type.isdigit()) and (int(self.data_type) in range(1, 4)):
-                break
-            else:
-                print("유효한 값을 입력해주세요")
+        # while True:
+        #     self.data_type = input("데이터 형식\n1. cse-cic-ids2018\n2. 명섭\n3. 재희\n")
+        #     if (self.data_type.isdigit()) and (int(self.data_type) in range(1, 4)):
+        #         break
+        #     else:
+        #         print("유효한 값을 입력해주세요")
+        self.data_type = 2
         ##############################
 
         self.flows = {}
