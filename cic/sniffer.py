@@ -8,12 +8,10 @@ from scapy.sendrecv import AsyncSniffer
 from . import flow_session as fs
 
 
-def create_sniffer(
-    input_file, input_interface, output_mode, output_file, url_model=None
-):
+def create_sniffer(input_file, input_interface, output_mode, url_model=None):
     assert (input_file is None) ^ (input_interface is None)
 
-    NewFlowSession = fs.generate_session_class(output_mode, output_file, url_model)
+    NewFlowSession = fs.generate_session_class(output_mode, url_model)
 
     if input_file is not None:
         return AsyncSniffer(

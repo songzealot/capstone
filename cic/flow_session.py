@@ -29,9 +29,9 @@ class FlowSession(DefaultSession):
         self.flows = {}
         self.csv_line = 0
 
-        if self.output_mode == "flow":
-            output = open(self.output_file, "w", newline="", encoding="utf-8")
-            self.csv_writer = csv.writer(output)
+        # if self.output_mode == "flow":
+        #     output = open(self.output_file, "w", newline="", encoding="utf-8")
+        #     self.csv_writer = csv.writer(output)
 
         self.packets_count = 0
 
@@ -128,22 +128,22 @@ class FlowSession(DefaultSession):
                 data = ""
                 ########################################
                 if int(self.data_type) == 1:
-                    print("cic")
+                    # print("cic")
                     data = flow.get_data()
                 elif int(self.data_type) == 2:
-                    print("ms")
+                    # print("ms")
                     data = flow.get_ms_data()
                 elif int(self.data_type) == 3:
-                    print("jh")
+                    # print("jh")
                     data = flow.get_jh_data()
                 ########################################
                 if self.csv_line == 0:
-                    print("key 기록됨")
+                    # print("key 기록됨")
                     print(data.keys())
-                    self.csv_writer.writerow(data.keys())
+                    # self.csv_writer.writerow(data.keys())
 
                 print(data.values())
-                self.csv_writer.writerow(data.values())
+                # self.csv_writer.writerow(data.values())
                 self.csv_line += 1
                 print(f"{self.csv_line}개의 데이터 기록됨")
 
@@ -152,13 +152,13 @@ class FlowSession(DefaultSession):
         #     print("Garbage Collection Finished. Flows = {}".format(len(self.flows)))
 
 
-def generate_session_class(output_mode, output_file, url_model):
+def generate_session_class(output_mode, url_model):
     return type(
         "NewFlowSession",
         (FlowSession,),
         {
             "output_mode": output_mode,
-            "output_file": output_file,
+            # "output_file": output_file,
             "url_model": url_model,
         },
     )
