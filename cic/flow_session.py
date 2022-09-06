@@ -17,6 +17,7 @@ class FlowSession(DefaultSession):
 
     def __init__(self, *args, **kwargs):
 
+        print("cic packet converter start")
         ##############################
         # while True:
         #     self.data_type = input("데이터 형식\n1. cse-cic-ids2018\n2. 명섭\n3. 재희\n")
@@ -24,6 +25,7 @@ class FlowSession(DefaultSession):
         #         break
         #     else:
         #         print("유효한 값을 입력해주세요")
+        # 데이터 형식 임시 고정
         self.data_type = 2
         ##############################
 
@@ -138,15 +140,18 @@ class FlowSession(DefaultSession):
                     # print("jh")
                     data = flow.get_jh_data()
                 ########################################
-                if self.csv_line == 0:
+                # if self.csv_line == 0:
                     # print("key 기록됨")
-                    print(data.keys())
+                    # print(data.keys())
                     # self.csv_writer.writerow(data.keys())
 
-                print(data.values())
+                print(list(data.values()))
                 # self.csv_writer.writerow(data.values())
                 self.csv_line += 1
                 print(f"{self.csv_line}개의 데이터 기록됨")
+
+                # 모델 넣고 돌리는 부분
+                # 모델이 아직 없음
 
                 del self.flows[k]
         # if not self.url_model:
