@@ -18,8 +18,12 @@ class DataReceiver(threading.Thread):
         print("nsl-kdd data receiver start")
         while True:
             if nslkdd.output_status():
-                print(f"{nslkdd.rt_output()}")
+                result = nslkdd.rt_output().decode('utf-8')
+                print(f"{result}")
                 nslkdd.output_false()
+
+                # 모델 적용 부분
+                # 모델이 아직 없음
 
 
 class PacketCapture(threading.Thread):
