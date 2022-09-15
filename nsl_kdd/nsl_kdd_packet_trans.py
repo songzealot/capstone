@@ -1,6 +1,8 @@
 import os
 import ctypes
 import threading
+import gui.gui_main as gui
+
 
 dll_path = os.path.dirname(os.path.realpath(__file__)) + "/DLL20220722.dll"
 
@@ -13,13 +15,17 @@ nslkdd.rt_output.restype = ctypes.c_char_p
 class DataReceiver(threading.Thread):
     def __init__(self):
         super().__init__()
+        self.count = 0
 
     def run(self):
         print("nsl-kdd data receiver start")
         while True:
             if nslkdd.output_status():
-                result = nslkdd.rt_output().decode('utf-8')
-                print(f"{result}")
+                self.count += 1
+                result = nslkdd.rt_output().decode("utf-8")
+                # print(f"{result}")
+                gui.myWindow.kddTotalCount(self.count)
+                gui.myWindow.logAppend(result)
                 nslkdd.output_false()
 
                 # 모델 적용 부분

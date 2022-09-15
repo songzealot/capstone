@@ -1,6 +1,7 @@
 import cic.sniffer as cic
 from scapy.all import *
 import nsl_kdd.nsl_kdd_packet_trans as nslkdd
+import gui.gui_main as gui
 
 IFACES.show()
 my_iface_index = input("네트워크 Index 번호를 입력\n")
@@ -24,11 +25,19 @@ pkc_th.start()
 # cic 데이터 변환 스레드 시작
 test_sniffer = cic.create_sniffer(None, my_iface, "flow", None)
 test_sniffer.start()
+# test_sniffer.join()
 
-try:
-    test_sniffer.join()
-except KeyboardInterrupt:
-    test_sniffer.stop()
-finally:
-    test_sniffer.join()
-    print("종료")
+gui.myWindow.show()
+gui.app.exec_()
+
+
+# 스레드 동작 중 에러 발생 -> qthread로 변환 필요
+
+
+# try:
+#     test_sniffer.join()
+# except KeyboardInterrupt:
+#     test_sniffer.stop()
+# finally:
+#     # test_sniffer.join()
+#     print("종료")

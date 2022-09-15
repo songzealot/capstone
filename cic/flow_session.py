@@ -7,6 +7,8 @@ from .features.context.packet_direction import PacketDirection
 from .features.context.packet_flow_key import get_packet_flow_key
 from .flow import Flow
 
+import gui.gui_main as gui
+
 EXPIRED_UPDATE = 40
 MACHINE_LEARNING_API = "http://localhost:8000/predict"
 GARBAGE_COLLECT_PACKETS = 100
@@ -66,6 +68,10 @@ class FlowSession(DefaultSession):
             return
 
         self.packets_count += 1
+        ########################################################################
+        print(self.packets_count)
+        gui.myWindow.packetCount(self.packets_count)
+        ########################################################################
 
         # If there is no forward flow with a count of 0
         if flow is None:
@@ -141,14 +147,17 @@ class FlowSession(DefaultSession):
                     data = flow.get_jh_data()
                 ########################################
                 # if self.csv_line == 0:
-                    # print("key 기록됨")
-                    # print(data.keys())
-                    # self.csv_writer.writerow(data.keys())
+                # print("key 기록됨")
+                # print(data.keys())
+                # self.csv_writer.writerow(data.keys())
 
-                print(list(data.values()))
+                # print(list(data.values()))
                 # self.csv_writer.writerow(data.values())
                 self.csv_line += 1
-                print(f"{self.csv_line}개의 데이터 기록됨")
+                # print(f"{self.csv_line}개의 데이터 기록됨")
+
+                gui.myWindow.cicTotalCount(self.csv_line)
+                gui.myWindow.logAppend(list(data.values()))
 
                 # 모델 넣고 돌리는 부분
                 # 모델이 아직 없음
