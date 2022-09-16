@@ -69,7 +69,7 @@ class FlowSession(DefaultSession):
 
         self.packets_count += 1
         ########################################################################
-        print(self.packets_count)
+        # print(self.packets_count)
         gui.myWindow.packetCount(self.packets_count)
         ########################################################################
 
