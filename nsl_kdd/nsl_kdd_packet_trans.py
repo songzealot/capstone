@@ -1,6 +1,6 @@
 import os
 import ctypes
-import threading
+from PyQt5.QtCore import *
 import gui.gui_main as gui
 
 
@@ -12,7 +12,7 @@ nslkdd = ctypes.cdll.LoadLibrary(dll_path)
 nslkdd.rt_output.restype = ctypes.c_char_p
 
 
-class DataReceiver(threading.Thread):
+class DataReceiver(QThread):
     def __init__(self):
         super().__init__()
         self.count = 0
@@ -32,11 +32,13 @@ class DataReceiver(threading.Thread):
                 # 모델이 아직 없음
 
 
-class PacketCapture(threading.Thread):
-    def __init__(self, dev_name):
+class PacketCapture(QThread):
+    def __init__(self):
         super().__init__()
-        self.dev_name = ctypes.c_char_p(dev_name.encode("utf-8"))
-
+        
     def run(self):
         print("nsl-kdd packet capture start")
         nslkdd.Test(self.dev_name)
+
+    def setDevName(self, dev_name):
+        self.dev_name = ctypes.c_char_p(dev_name.encode("utf-8"))

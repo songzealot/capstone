@@ -1,12 +1,9 @@
-import argparse
-
 from scapy.sendrecv import AsyncSniffer
-
 
 # from .flow_session import generate_session_class
 # from .flow_session import generate_session_class
 from . import flow_session as fs
-
+from PyQt5.QtCore import *
 
 def create_sniffer(input_file, input_interface, output_mode, url_model=None):
     assert (input_file is None) ^ (input_interface is None)
@@ -29,6 +26,17 @@ def create_sniffer(input_file, input_interface, output_mode, url_model=None):
             session=NewFlowSession,
             store=False,
         )
+
+class cicTest(QThread):
+    def __init__(self):
+        super().__init__()
+        self.sniffer = create_sniffer(None, self.my_iface, "flow", None)
+
+    def run(self):
+        self.sniffer.start()
+
+    def setIface(self, my_iface):
+        self.my_iface = my_iface
 
 
 # def main():

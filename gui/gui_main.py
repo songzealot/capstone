@@ -3,6 +3,9 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 import os
 
+import nsl_kdd.nsl_kdd_packet_trans as nslkdd
+import cic.sniffer as cic
+
 # UI파일 연결
 ui_path = os.path.dirname(os.path.realpath(__file__)) + "/main.ui"
 
@@ -13,6 +16,14 @@ class WindowClass(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+        dr_th = nslkdd.DataReceiver()
+        pkc_th = nslkdd.PacketCapture()
+        cic_th = cic.cicTest()
+        dr_th.start()
+        pkc_th.start()
+        cic_th.start()
+
 
         self.button_start.clicked.connect(self.buttonStart)
 
@@ -35,6 +46,4 @@ class WindowClass(QMainWindow, form_class):
         )
 
 
-app = QApplication(sys.argv)
 
-myWindow = WindowClass()

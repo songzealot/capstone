@@ -16,19 +16,27 @@ print(f"{my_iface} 선택됨")
 # csv_name = input("저장할 csv 파일 이름\n")
 # csv_name += ".csv"
 
+
+# 클래스 정의만 되어있는 상태에서 메소드 호출
+# iface값 따로 넘기기 수정 필요
+nslkdd.PacketCapture.setDevName(my_iface_name)
+cic.cicTest.setIface(my_iface)
+
+
 # nsl-kdd 데이터 변환 스레드 시작
-dr_th = nslkdd.DataReceiver()
-pkc_th = nslkdd.PacketCapture(my_iface_name)
-dr_th.start()
-pkc_th.start()
+# dr_th = nslkdd.DataReceiver()
+# pkc_th = nslkdd.PacketCapture(my_iface_name)
+# dr_th.start()
+# pkc_th.start()
 
 # cic 데이터 변환 스레드 시작
-test_sniffer = cic.create_sniffer(None, my_iface, "flow", None)
-test_sniffer.start()
+# test_sniffer = cic.create_sniffer(None, my_iface, "flow", None)
+# test_sniffer.start()
 # test_sniffer.join()
-
-gui.myWindow.show()
-gui.app.exec_()
+app = gui.QApplication(sys.argv)
+myWindow = gui.WindowClass()
+myWindow.show()
+app.exec_()
 
 
 # 스레드 동작 중 에러 발생 -> qthread로 변환 필요
