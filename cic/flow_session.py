@@ -1,4 +1,3 @@
-import csv
 from collections import defaultdict
 
 from scapy.sessions import DefaultSession
@@ -7,7 +6,8 @@ from .features.context.packet_direction import PacketDirection
 from .features.context.packet_flow_key import get_packet_flow_key
 from .flow import Flow
 
-import gui.gui_main as gui
+import gui.gui_main as guim
+from PyQt5.QtCore import *
 
 EXPIRED_UPDATE = 40
 MACHINE_LEARNING_API = "http://localhost:8000/predict"
@@ -15,11 +15,10 @@ GARBAGE_COLLECT_PACKETS = 100
 
 
 class FlowSession(DefaultSession):
+
     """Creates a list of network flows."""
 
     def __init__(self, *args, **kwargs):
-
-        print("cic packet converter start")
         ##############################
         # while True:
         #     self.data_type = input("데이터 형식\n1. cse-cic-ids2018\n2. 명섭\n3. 재희\n")
@@ -70,7 +69,7 @@ class FlowSession(DefaultSession):
         self.packets_count += 1
         ########################################################################
         # print(self.packets_count)
-        gui.myWindow.packetCount(self.packets_count)
+        guim.myWindow.packetCount(self.packets_count)
         ########################################################################
 
         # If there is no forward flow with a count of 0
@@ -156,8 +155,9 @@ class FlowSession(DefaultSession):
                 self.csv_line += 1
                 # print(f"{self.csv_line}개의 데이터 기록됨")
 
-                gui.myWindow.cicTotalCount(self.csv_line)
-                gui.myWindow.logAppend(list(data.values()))
+                guim.myWindow.cicTotalCount(self.csv_line)
+                # guim.myWindow.logAppend(list(data.values()))
+                guim.myWindow.cicstr.setResult(str(list(data.values())))
 
                 # 모델 넣고 돌리는 부분
                 # 모델이 아직 없음

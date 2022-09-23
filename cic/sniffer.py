@@ -5,6 +5,7 @@ from scapy.sendrecv import AsyncSniffer
 from . import flow_session as fs
 from PyQt5.QtCore import *
 
+
 def create_sniffer(input_file, input_interface, output_mode, url_model=None):
     assert (input_file is None) ^ (input_interface is None)
 
@@ -27,13 +28,18 @@ def create_sniffer(input_file, input_interface, output_mode, url_model=None):
             store=False,
         )
 
+
 class cicTest(QThread):
+    text_changed = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
-        self.sniffer = create_sniffer(None, self.my_iface, "flow", None)
 
     def run(self):
+        self.text_changed.emit("cic packet converter start")
+        self.sniffer = create_sniffer(None, self.my_iface, "flow", None)
         self.sniffer.start()
+        # print("cic packet converter start")
 
     def setIface(self, my_iface):
         self.my_iface = my_iface

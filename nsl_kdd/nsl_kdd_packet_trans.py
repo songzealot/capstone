@@ -1,7 +1,7 @@
 import os
 import ctypes
 from PyQt5.QtCore import *
-import gui.gui_main as gui
+import gui.gui_main as guim
 
 
 dll_path = os.path.dirname(os.path.realpath(__file__)) + "/DLL20220722.dll"
@@ -13,19 +13,24 @@ nslkdd.rt_output.restype = ctypes.c_char_p
 
 
 class DataReceiver(QThread):
+
+    text_changed = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
         self.count = 0
 
     def run(self):
-        print("nsl-kdd data receiver start")
+        # print("nsl-kdd data receiver start")
+        self.text_changed.emit("nsl-kdd data receiver start")
         while True:
             if nslkdd.output_status():
                 self.count += 1
                 result = nslkdd.rt_output().decode("utf-8")
                 # print(f"{result}")
-                gui.myWindow.kddTotalCount(self.count)
-                gui.myWindow.logAppend(result)
+                guim.myWindow.kddTotalCount(self.count)
+                # guim.myWindow.logAppend(result)
+                self.text_changed.emit(result)
                 nslkdd.output_false()
 
                 # 모델 적용 부분
@@ -33,11 +38,14 @@ class DataReceiver(QThread):
 
 
 class PacketCapture(QThread):
+    text_changed = pyqtSignal(str)
+
     def __init__(self):
         super().__init__()
-        
+
     def run(self):
-        print("nsl-kdd packet capture start")
+        self.text_changed.emit("nsl-kdd packet capture start")
+        # print("nsl-kdd packet capture start")
         nslkdd.Test(self.dev_name)
 
     def setDevName(self, dev_name):

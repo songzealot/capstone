@@ -1,26 +1,28 @@
-import cic.sniffer as cic
-from scapy.all import *
-import nsl_kdd.nsl_kdd_packet_trans as nslkdd
-import gui.gui_main as gui
+import sys
 
-IFACES.show()
-my_iface_index = input("네트워크 Index 번호를 입력\n")
-ifp = InterfaceProvider()
+# import cic.sniffer as cic
 
-# 네트워크 인터페이스 디바이스 이름
-my_iface_name = str(dev_from_index(my_iface_index))
+# from scapy.all import *
+# import nsl_kdd.nsl_kdd_packet_trans as nslkdd
+import gui.gui_main as guim
 
-# 네트워크 인터페이스 이름
-my_iface = ifp._format(dev_from_index(my_iface_index))[1]
-print(f"{my_iface} 선택됨")
+# import gui.iface as iface
+
+# IFACES.show()
+
+# my_iface_index = input("네트워크 Index 번호를 입력\n")
+
+# ifp = InterfaceProvider()
+
+
 # csv_name = input("저장할 csv 파일 이름\n")
 # csv_name += ".csv"
 
 
 # 클래스 정의만 되어있는 상태에서 메소드 호출
 # iface값 따로 넘기기 수정 필요
-nslkdd.PacketCapture.setDevName(my_iface_name)
-cic.cicTest.setIface(my_iface)
+# nslkdd.PacketCapture.setDevName(my_iface_name)
+# cic.cicTest.setIface(my_iface)
 
 
 # nsl-kdd 데이터 변환 스레드 시작
@@ -33,10 +35,9 @@ cic.cicTest.setIface(my_iface)
 # test_sniffer = cic.create_sniffer(None, my_iface, "flow", None)
 # test_sniffer.start()
 # test_sniffer.join()
-app = gui.QApplication(sys.argv)
-myWindow = gui.WindowClass()
-myWindow.show()
-app.exec_()
+
+guim.createdGuiShow()
+guim.pyqtAppExec()
 
 
 # 스레드 동작 중 에러 발생 -> qthread로 변환 필요
