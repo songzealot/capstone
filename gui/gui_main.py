@@ -24,7 +24,9 @@ class WindowClass(QMainWindow, form_class):
         self.ifacefunc = iface.Myiface()
         print(self.ifacefunc.showIfaceList())
         self.ifacefunc.setIface(input("네트워크 Index 번호를 입력\n"))
-        print(f"{self.ifacefunc.getIfaceName()} 선택됨")
+        iface_name = self.ifacefunc.getIfaceName()
+        print(f"{iface_name} 선택됨")
+        self.selected_network.setText(str(iface_name))
 
         # nslkdd, cic 패킷 캡쳐-데이터 특징 생성 스레드
         self.dr_th = nslkdd.DataReceiver()
@@ -36,7 +38,8 @@ class WindowClass(QMainWindow, form_class):
         self.cic_th.setIface(self.ifacefunc.getIfaceName())
 
         # 버튼
-        self.button_start.clicked.connect(self.buttonStart)
+        # self.button_start.clicked.connect(self.buttonStart)
+        # self.button_stop.clicked.connect(self.buttonStop)
 
         # 로그박스 출력(임시)
         self.cicstr = CicStr()
@@ -45,13 +48,22 @@ class WindowClass(QMainWindow, form_class):
         self.dr_th.text_changed.connect(self.log_box.append)
         self.pkc_th.text_changed.connect(self.log_box.append)
 
+        # kdd 수치 변경
+        self.dr_th.count_changed.connect(self.kdd_data_total.setText)
+        self.dr_th.probe_changed.connect(self.kdd_probe_warning.setText)
+
+        # cic 수치 변경
+        self.cicstr.cic_count.connect(self.cic_data_total.setText)
+
     def buttonStart(self):
-
-        # self.captured_packets.setText("테스트")
-
         self.dr_th.start()
         self.pkc_th.start()
         self.cic_th.start()
+
+    # def buttonStop(self):
+    #     self.pkc_th.stop()
+    #     self.dr_th.stop()
+    #     self.cic_th.stop()
 
     def packetCount(self, count):
         self.captured_packets.setText(str(count))
@@ -71,13 +83,18 @@ class WindowClass(QMainWindow, form_class):
 
 class CicStr(QObject):
     cic_result = pyqtSignal(str)
+    cic_count = pyqtSignal(str)
 
     def setResult(self, result):
         self.cic_result.emit(result)
 
+    def setTotalCount(self, count):
+        self.cic_count.emit(str(count))
+
 
 app = QApplication(sys.argv)
 myWindow = WindowClass()
+myWindow.buttonStart()
 
 
 def createdGuiShow():

@@ -1,5 +1,3 @@
-import sys
-
 # import cic.sniffer as cic
 
 # from scapy.all import *

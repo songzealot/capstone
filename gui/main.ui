@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,8 +61,8 @@
      <rect>
       <x>20</x>
       <y>110</y>
-      <width>761</width>
-      <height>91</height>
+      <width>611</width>
+      <height>321</height>
      </rect>
     </property>
     <property name="font">
@@ -74,13 +74,13 @@
      </font>
     </property>
     <property name="title">
-     <string>NSL-KDD로 분석된 데이터</string>
+     <string>NSL-KDD</string>
     </property>
     <widget class="QLabel" name="kdd_data_total">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>40</y>
+       <x>340</x>
+       <y>60</y>
        <width>201</width>
        <height>31</height>
       </rect>
@@ -97,12 +97,12 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="just_label">
+    <widget class="QLabel" name="kdd_probe_warning">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>40</y>
-       <width>21</width>
+       <x>340</x>
+       <y>220</y>
+       <width>201</width>
        <height>31</height>
       </rect>
      </property>
@@ -115,14 +115,77 @@
       </font>
      </property>
      <property name="text">
-      <string>/</string>
+      <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="kdd_data_warning">
+    <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>40</y>
+       <x>10</x>
+       <y>60</y>
+       <width>221</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>분석된 데이터</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>321</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>DoS로 탐지된 공격</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>301</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Probe로 탐지된 공격</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="kdd_dos_warning">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>140</y>
        <width>201</width>
        <height>31</height>
       </rect>
@@ -143,10 +206,10 @@
    <widget class="QGroupBox" name="description_cic">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>210</y>
-      <width>761</width>
-      <height>91</height>
+      <x>650</x>
+      <y>110</y>
+      <width>611</width>
+      <height>321</height>
      </rect>
     </property>
     <property name="font">
@@ -158,13 +221,13 @@
      </font>
     </property>
     <property name="title">
-     <string>CSE-CIC-IDS 2018로 분석된 데이터</string>
+     <string>CSE-CIC-IDS 2018</string>
     </property>
     <widget class="QLabel" name="cic_data_total">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>40</y>
+       <x>340</x>
+       <y>60</y>
        <width>201</width>
        <height>31</height>
       </rect>
@@ -181,12 +244,12 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="just_label_2">
+    <widget class="QLabel" name="cic_bf_warning">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>40</y>
-       <width>21</width>
+       <x>340</x>
+       <y>140</y>
+       <width>201</width>
        <height>31</height>
       </rect>
      </property>
@@ -199,14 +262,77 @@
       </font>
      </property>
      <property name="text">
-      <string>/</string>
+      <string>0</string>
      </property>
     </widget>
-    <widget class="QLabel" name="cic_data_warning">
+    <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>40</y>
+       <x>10</x>
+       <y>140</y>
+       <width>311</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>BruteForce로 탐지된 공격</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>221</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>분석된 데이터</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>311</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>DDoS로 탐지된 공격</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="cic_ddos_warning">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>220</y>
        <width>201</width>
        <height>31</height>
       </rect>
@@ -228,22 +354,22 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>330</y>
-      <width>761</width>
-      <height>231</height>
+      <y>450</y>
+      <width>1241</width>
+      <height>241</height>
      </rect>
     </property>
     <property name="sizeAdjustPolicy">
      <enum>QAbstractScrollArea::AdjustToContents</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_start">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>40</y>
-      <width>121</width>
-      <height>61</height>
+      <x>460</x>
+      <y>20</y>
+      <width>801</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
@@ -254,30 +380,30 @@
       <bold>true</bold>
      </font>
     </property>
-    <property name="text">
-     <string>시작</string>
+    <property name="title">
+     <string>선택된 네트워크 인터페이스</string>
     </property>
-   </widget>
-   <widget class="QPushButton" name="button_stop">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>40</y>
-      <width>121</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>맑은 고딕</family>
-      <pointsize>20</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>중지</string>
-    </property>
+    <widget class="QLabel" name="selected_network">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>35</y>
+       <width>761</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>맑은 고딕</family>
+       <pointsize>20</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>

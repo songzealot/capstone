@@ -41,6 +41,10 @@ class cicTest(QThread):
         self.sniffer.start()
         # print("cic packet converter start")
 
+    def stop(self):
+        self.quit()
+        self.text_changed.emit("cic packet converter stop")
+
     def setIface(self, my_iface):
         self.my_iface = my_iface
 

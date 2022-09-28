@@ -155,7 +155,9 @@ class FlowSession(DefaultSession):
                 self.csv_line += 1
                 # print(f"{self.csv_line}개의 데이터 기록됨")
 
-                guim.myWindow.cicTotalCount(self.csv_line)
+                # guim.myWindow.cicTotalCount(self.csv_line)
+                guim.myWindow.cicstr.setTotalCount(self.csv_line)
+
                 # guim.myWindow.logAppend(list(data.values()))
                 guim.myWindow.cicstr.setResult(str(list(data.values())))
 
