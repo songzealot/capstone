@@ -8,6 +8,8 @@ import nsl_kdd.nsl_kdd_packet_trans as nslkdd
 import cic.sniffer as cic
 from . import iface
 
+from . import iface_select
+
 # import main as mmm
 
 # UI파일 연결
@@ -21,9 +23,17 @@ class WindowClass(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
 
+        self.setWindowTitle("ㅁㄴㅇㄹ")
+
         self.ifacefunc = iface.Myiface()
-        print(self.ifacefunc.showIfaceList())
-        self.ifacefunc.setIface(input("네트워크 Index 번호를 입력\n"))
+        # print(self.ifacefunc.showIfaceList())
+        self.ifacelist_sliced = self.ifacefunc.showIfaceList().split("\n")
+        del self.ifacelist_sliced[0]
+
+        self.ifaceWindow(self.ifacelist_sliced)
+
+        # self.ifacefunc.setIface(input("네트워크 Index 번호를 입력\n"))
+        self.ifacefunc.setIface(self.iface_selected)
         iface_name = self.ifacefunc.getIfaceName()
         print(f"{iface_name} 선택됨")
         self.selected_network.setText(str(iface_name))
@@ -79,6 +89,12 @@ class WindowClass(QMainWindow, form_class):
         self.log_box.verticalScrollBar().setValue(
             self.log_box.verticalScrollBar().maximum()
         )
+
+    def ifaceWindow(self, iflist):
+        ifwindow = iface_select.IfaceSelectGUI(iflist)
+        ifwindow.exec_()
+        self.iface_selected = ifwindow.iface_index
+        # print(ifwindow.iface_index)
 
 
 class CicStr(QObject):
