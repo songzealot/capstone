@@ -3,6 +3,7 @@ import ctypes
 from PyQt5.QtCore import *
 import gui.gui_main as guim
 import model.probe_dnn.probe as probe
+import model.dos_dnn.dos as dos
 
 
 dll_path = os.path.dirname(os.path.realpath(__file__)) + "/DLL20220722.dll"
@@ -18,11 +19,13 @@ class DataReceiver(QThread):
     text_changed = pyqtSignal(str)
     count_changed = pyqtSignal(str)
     probe_changed = pyqtSignal(str)
+    dos_changed = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
         self.count = 0
         self.probe = 0
+        self.dos = 0
 
     def run(self):
         # print("nsl-kdd data receiver start")
@@ -38,12 +41,33 @@ class DataReceiver(QThread):
                 # guim.myWindow.logAppend(result)
                 # self.text_changed.emit(result)
                 result_list = result.split(",")
+                # print(result_list)
+                # for i in range(0, 28):
+                #     if i == 0 or (4 <= i and i < 11):
+                #         result_list[i] = int(result_list[i])
+                #     elif 11 <= i:
+                #         result_list[i] = float(result_list[i])
+                for i in range(0, 28):
+                    if i == 0 or i > 3:
+                        result_list[i] = float(result_list[i])
+                # print(result_list)
                 pmr = probe.probe_model(result_list)
                 if pmr:
                     self.probe += 1
                     self.probe_changed.emit(str(self.probe))
+                    self.text_changed.emit("Probe: " + str(pmr))
                 else:
-                    self.text_changed.emit(str(probe.probe_model(result.split(","))))
+                    # self.text_changed.emit(str(probe.probe_model(result.split(","))))
+                    self.text_changed.emit("Probe: " + str(pmr))
+
+                dmr = dos.dos_model(result_list)
+                if dmr:
+                    self.dos += 1
+                    self.dos_changed.emit(str(self.dos))
+                    self.text_changed.emit("DoS: " + str(dmr))
+                else:
+                    # self.text_changed.emit(str(probe.probe_model(result.split(","))))
+                    self.text_changed.emit("DoS: " + str(dmr))
 
                 nslkdd.output_false()
 

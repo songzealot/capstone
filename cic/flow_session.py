@@ -6,6 +6,9 @@ from .features.context.packet_direction import PacketDirection
 from .features.context.packet_flow_key import get_packet_flow_key
 from .flow import Flow
 
+from model.bruteforce_cic import bf
+from model.ddos_cic import ddos
+
 import gui.gui_main as guim
 from PyQt5.QtCore import *
 
@@ -32,6 +35,8 @@ class FlowSession(DefaultSession):
 
         self.flows = {}
         self.csv_line = 0
+        self.bf_attack_count = 0
+        self.ddos_attack_count = 0
 
         # if self.output_mode == "flow":
         #     output = open(self.output_file, "w", newline="", encoding="utf-8")
@@ -135,15 +140,29 @@ class FlowSession(DefaultSession):
             ):
                 data = ""
                 ########################################
-                if int(self.data_type) == 1:
-                    # print("cic")
-                    data = flow.get_data()
-                elif int(self.data_type) == 2:
-                    # print("ms")
-                    data = flow.get_ms_data()
-                elif int(self.data_type) == 3:
-                    # print("jh")
-                    data = flow.get_jh_data()
+                # if int(self.data_type) == 1:
+                # print("cic")
+                # data = flow.get_data()
+                # elif int(self.data_type) == 2:
+                # print("ms")
+                data_ms = flow.get_ms_data()
+                ms_result = bf.bruteForce(list(data_ms.values()))
+                if ms_result == 1:
+                    self.bf_attack_count += 1
+                    # gui 변경 추가
+
+                # print(type(ms_result))
+                # print(ms_result)
+                guim.myWindow.cicstr.setResult("Brute Force: " + str(ms_result))
+
+                # elif int(self.data_type) == 3:
+                # print("jh")
+                data_jh = flow.get_jh_data()
+                jh_result = ddos.ddos(list(data_jh.values()))
+                if jh_result == 1:
+                    self.ddos_attack_count += 1
+                    # gui 변경 추가
+                guim.myWindow.cicstr.setResult("DDoS: " + str(jh_result))
                 ########################################
                 # if self.csv_line == 0:
                 # print("key 기록됨")
@@ -159,10 +178,7 @@ class FlowSession(DefaultSession):
                 guim.myWindow.cicstr.setTotalCount(self.csv_line)
 
                 # guim.myWindow.logAppend(list(data.values()))
-                guim.myWindow.cicstr.setResult(str(list(data.values())))
-
-                # 모델 넣고 돌리는 부분
-                # 모델이 아직 없음
+                # guim.myWindow.cicstr.setResult(str(list(data.values())))
 
                 del self.flows[k]
         # if not self.url_model:

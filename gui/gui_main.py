@@ -61,6 +61,7 @@ class WindowClass(QMainWindow, form_class):
         # kdd 수치 변경
         self.dr_th.count_changed.connect(self.kdd_data_total.setText)
         self.dr_th.probe_changed.connect(self.kdd_probe_warning.setText)
+        self.dr_th.dos_changed.connect(self.kdd_dos_warning.setText)
 
         # cic 수치 변경
         self.cicstr.cic_count.connect(self.cic_data_total.setText)
