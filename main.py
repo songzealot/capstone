@@ -1,8 +1,16 @@
+# vram 사전 할당 해제
+import tensorflow as tf
+
+gpu_devices = tf.config.experimental.list_physical_devices("GPU")
+tf.config.experimental.set_memory_growth(gpu_devices[0], True)
+
+
 # import cic.sniffer as cic
 
 # from scapy.all import *
 # import nsl_kdd.nsl_kdd_packet_trans as nslkdd
 import gui.gui_main as guim
+
 
 # import gui.iface as iface
 
