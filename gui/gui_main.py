@@ -65,6 +65,8 @@ class WindowClass(QMainWindow, form_class):
 
         # cic 수치 변경
         self.cicstr.cic_count.connect(self.cic_data_total.setText)
+        self.cicstr.cic_bf_count.connect(self.cic_bf_warning.setText)
+        self.cicstr.cic_ddos_count.connect(self.cic_ddos_warning.setText)
 
     def buttonStart(self):
         self.dr_th.start()
@@ -101,12 +103,20 @@ class WindowClass(QMainWindow, form_class):
 class CicStr(QObject):
     cic_result = pyqtSignal(str)
     cic_count = pyqtSignal(str)
+    cic_bf_count = pyqtSignal(str)
+    cic_ddos_count = pyqtSignal(str)
 
     def setResult(self, result):
         self.cic_result.emit(result)
 
     def setTotalCount(self, count):
         self.cic_count.emit(str(count))
+
+    def setBFCount(self, count):
+        self.cic_bf_count.emit(str(count))
+
+    def setDDoSCount(self, count):
+        self.cic_ddos_count.emit(str(count))
 
 
 app = QApplication(sys.argv)

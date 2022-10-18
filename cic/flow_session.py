@@ -149,6 +149,7 @@ class FlowSession(DefaultSession):
                 ms_result = bf.bruteForce(list(data_ms.values()))
                 if ms_result == 1:
                     self.bf_attack_count += 1
+                    guim.myWindow.cicstr.setBFCount(self.bf_attack_count)
                     # gui 변경 추가
 
                 # print(type(ms_result))
@@ -161,6 +162,7 @@ class FlowSession(DefaultSession):
                 jh_result = ddos.ddos(list(data_jh.values()))
                 if jh_result == 1:
                     self.ddos_attack_count += 1
+                    guim.myWindow.cicstr.setDDoSCount(self.ddos_attack_count)
                     # gui 변경 추가
                 guim.myWindow.cicstr.setResult("DDoS: " + str(jh_result))
                 ########################################
