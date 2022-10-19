@@ -11,6 +11,7 @@ from model.ddos_cic import ddos
 
 import gui.gui_main as guim
 from PyQt5.QtCore import *
+import datetime
 
 EXPIRED_UPDATE = 40
 MACHINE_LEARNING_API = "http://localhost:8000/predict"
@@ -146,25 +147,49 @@ class FlowSession(DefaultSession):
                 # elif int(self.data_type) == 2:
                 # print("ms")
                 data_ms = flow.get_ms_data()
-                ms_result = bf.bruteForce(list(data_ms.values()))
+                # print(data_ms)
+                ms_pkt_info = list(data_ms.values())[:5]
+                if ms_pkt_info[4] == 1:
+                    ms_pkt_info[4] = "ICMP"
+                elif ms_pkt_info[4] == 6:
+                    ms_pkt_info[4] = "TCP"
+                elif ms_pkt_info[4] == 17:
+                    ms_pkt_info[4] = "UDP"
+                ms_pkt_info_str = f"{ms_pkt_info[4]}\t{ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]}"
+                guim.myWindow.cicstr.ipLog(ms_pkt_info_str)
+                # print(ms_pkt_info)
+                ms_list = list(data_ms.values())[5:]
+                # print(ms_list)
+                # ms_result = bf.bruteForce(list(data_ms.values()))
+                ms_result = bf.bruteForce(ms_list)
                 if ms_result == 1:
                     self.bf_attack_count += 1
                     guim.myWindow.cicstr.setBFCount(self.bf_attack_count)
+                    guim.myWindow.cicstr.setResult(
+                        f"[공격 탐지됨] {datetime.datetime.now()} - Brute Force ({ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]})"
+                    )
                     # gui 변경 추가
 
                 # print(type(ms_result))
                 # print(ms_result)
-                guim.myWindow.cicstr.setResult("Brute Force: " + str(ms_result))
 
                 # elif int(self.data_type) == 3:
                 # print("jh")
                 data_jh = flow.get_jh_data()
-                jh_result = ddos.ddos(list(data_jh.values()))
+                # print(data_jh)
+                jh_pkt_info = list(data_jh.values())[:5]
+                # print(jh_pkt_info)
+                jh_list = list(data_jh.values())[5:]
+                # print(jh_list)
+                jh_result = ddos.ddos(jh_list)
                 if jh_result == 1:
                     self.ddos_attack_count += 1
                     guim.myWindow.cicstr.setDDoSCount(self.ddos_attack_count)
+                    guim.myWindow.cicstr.setResult(
+                        f"[공격 탐지됨] - DDoS ({ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]})"
+                    )
                     # gui 변경 추가
-                guim.myWindow.cicstr.setResult("DDoS: " + str(jh_result))
+                # guim.myWindow.cicstr.setResult("DDoS: " + str(jh_result))
                 ########################################
                 # if self.csv_line == 0:
                 # print("key 기록됨")
