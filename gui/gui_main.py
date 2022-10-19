@@ -9,6 +9,7 @@ import cic.sniffer as cic
 from . import iface
 
 from . import iface_select
+from . import team
 
 # import main as mmm
 
@@ -22,8 +23,6 @@ class WindowClass(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-
-        self.setWindowTitle("ㅁㄴㅇㄹ")
 
         self.ifacefunc = iface.Myiface()
         # print(self.ifacefunc.showIfaceList())
@@ -47,16 +46,13 @@ class WindowClass(QMainWindow, form_class):
         self.pkc_th.setDevName(self.ifacefunc.getIfaceDev())
         self.cic_th.setIface(self.ifacefunc.getIfaceName())
 
-        # 버튼
-        # self.button_start.clicked.connect(self.buttonStart)
-        # self.button_stop.clicked.connect(self.buttonStop)
-
         # 로그박스 출력(임시)
         self.cicstr = CicStr()
         self.cicstr.cic_result.connect(self.log_box.append)
         self.cic_th.text_changed.connect(self.log_box.append)
         self.dr_th.text_changed.connect(self.log_box.append)
         self.pkc_th.text_changed.connect(self.log_box.append)
+        self.cicstr.cic_ip_log.connect(self.ip_log_box.append)
 
         # kdd 수치 변경
         self.dr_th.count_changed.connect(self.kdd_data_total.setText)
@@ -68,7 +64,13 @@ class WindowClass(QMainWindow, form_class):
         self.cicstr.cic_bf_count.connect(self.cic_bf_warning.setText)
         self.cicstr.cic_ddos_count.connect(self.cic_ddos_warning.setText)
 
-    def buttonStart(self):
+        # 기타 gui
+        self.action.setShortcut("Ctrl+I")
+        self.action.triggered.connect(self.teamWindow)
+        self.action_2.setShortcut("Ctrl+Q")
+        self.action_2.triggered.connect(qApp.quit)
+
+    def threadStart(self):
         self.dr_th.start()
         self.pkc_th.start()
         self.cic_th.start()
@@ -99,12 +101,17 @@ class WindowClass(QMainWindow, form_class):
         self.iface_selected = ifwindow.iface_index
         # print(ifwindow.iface_index)
 
+    def teamWindow(self):
+        team_about = team.TeamGUI()
+        team_about.exec_()
+
 
 class CicStr(QObject):
     cic_result = pyqtSignal(str)
     cic_count = pyqtSignal(str)
     cic_bf_count = pyqtSignal(str)
     cic_ddos_count = pyqtSignal(str)
+    cic_ip_log = pyqtSignal(str)
 
     def setResult(self, result):
         self.cic_result.emit(result)
@@ -118,10 +125,13 @@ class CicStr(QObject):
     def setDDoSCount(self, count):
         self.cic_ddos_count.emit(str(count))
 
+    def ipLog(self, ip_info):
+        self.cic_ip_log.emit(str(ip_info))
+
 
 app = QApplication(sys.argv)
 myWindow = WindowClass()
-myWindow.buttonStart()
+myWindow.threadStart()
 
 
 def createdGuiShow():
