@@ -49,6 +49,8 @@ class DataReceiver(QThread):
                 #         result_list[i] = float(result_list[i])
                 for i in range(0, 28):
                     if i == 0 or i > 3:
+                        if "0.00\\x" in result_list[i]:
+                            result_list[i] = 0.00
                         result_list[i] = float(result_list[i])
                 # print(result_list)
                 pmr = probe.probe_model(result_list)
