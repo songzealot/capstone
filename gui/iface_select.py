@@ -13,8 +13,6 @@ class IfaceSelectGUI(QDialog, form_class):
         super().__init__()
         self.setupUi(self)
 
-        self.setWindowTitle("네트워크 인터페이스 선택")
-
         self.iface_index = None
         for a in iflist:
             self.listWidget.addItem(a)

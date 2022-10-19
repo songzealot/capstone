@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>네트워크 인터페이스 선택</string>
   </property>
   <widget class="QListWidget" name="listWidget">
    <property name="geometry">
