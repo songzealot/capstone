@@ -77,11 +77,11 @@ class PacketTime:
         date = datetime.fromtimestamp(time).strftime("%Y%m%d")
         return date
 
-    def get_tiem(self):
+    def get_time(self):
         # 명섭 데이터 형식에 사용
         time = self.flow.packets[0][0].time
         time = datetime.fromtimestamp(time).strftime("%H%M%S")
-        return time
+        return int(time)
 
     def get_duration(self):
         """Calculates the duration of a network flow.

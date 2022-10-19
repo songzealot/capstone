@@ -247,7 +247,7 @@ class Flow:
             "Init Bwd Win Byts": self.init_window_size[PacketDirection.REVERSE],
             "Fwd Act Data Pkts": packet_count.has_payload(PacketDirection.FORWARD),
             "Fwd Seg Size Min": flow_bytes.get_min_forward_header_bytes(),
-            "Time": packet_time.get_tiem(),
+            "Time": packet_time.get_time(),
             # "src_mac": self.src_mac,
             # "dst_mac": self.dest_mac,
             # Basic information from packet times
