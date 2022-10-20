@@ -53,6 +53,7 @@ class WindowClass(QMainWindow, form_class):
         self.dr_th.text_changed.connect(self.log_box.append)
         self.pkc_th.text_changed.connect(self.log_box.append)
         self.cicstr.cic_ip_log.connect(self.ip_log_box.append)
+        self.dr_th.ip_log.connect(self.ip_log_box.append)
 
         # kdd 수치 변경
         self.dr_th.count_changed.connect(self.kdd_data_total.setText)

@@ -1,9 +1,10 @@
 import os
 import ctypes
 from PyQt5.QtCore import *
-import gui.gui_main as guim
+
 import model.probe_dnn.probe as probe
 import model.dos_dnn.dos as dos
+import datetime
 
 
 dll_path = os.path.dirname(os.path.realpath(__file__)) + "/DLL20220722.dll"
@@ -20,6 +21,7 @@ class DataReceiver(QThread):
     count_changed = pyqtSignal(str)
     probe_changed = pyqtSignal(str)
     dos_changed = pyqtSignal(str)
+    ip_log = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
@@ -34,6 +36,7 @@ class DataReceiver(QThread):
             if nslkdd.output_status():
                 self.count += 1
                 result = nslkdd.rt_output().decode("utf-8")
+                # print(result)
                 # print(f"{result}")
                 # guim.myWindow.kddTotalCount(self.count)
                 self.count_changed.emit(str(self.count))
@@ -52,24 +55,37 @@ class DataReceiver(QThread):
                         if "0.00\\x" in result_list[i]:
                             result_list[i] = 0.00
                         result_list[i] = float(result_list[i])
-                # print(result_list)
-                pmr = probe.probe_model(result_list)
+                # print(result_list[:-5])
+                # print(result_list[-5:])
+                kdd_pkt_info = f"{result_list[-5]}:{result_list[-4]} -> {result_list[-3]}:{result_list[-2]}"
+                #
+                time_now = datetime.datetime.now()
+
+                self.ip_log.emit(str(f"{str(result_list[1]).upper()}\t{kdd_pkt_info}"))
+
+                ##########################################
+                pmr = probe.probe_model(result_list[:-5])
                 if pmr:
                     self.probe += 1
                     self.probe_changed.emit(str(self.probe))
-                    self.text_changed.emit("Probe: " + str(pmr))
-                else:
-                    # self.text_changed.emit(str(probe.probe_model(result.split(","))))
-                    self.text_changed.emit("Probe: " + str(pmr))
+                    self.text_changed.emit(
+                        f"[공격 탐지됨] {time_now} - Probe ({kdd_pkt_info})"
+                    )
+                # else:
+                # self.text_changed.emit(str(probe.probe_model(result.split(","))))
+                # self.text_changed.emit("Probe: " + str(pmr))
 
-                dmr = dos.dos_model(result_list)
+                dmr = dos.dos_model(result_list[:-5])
                 if dmr:
                     self.dos += 1
                     self.dos_changed.emit(str(self.dos))
-                    self.text_changed.emit("DoS: " + str(dmr))
-                else:
-                    # self.text_changed.emit(str(probe.probe_model(result.split(","))))
-                    self.text_changed.emit("DoS: " + str(dmr))
+                    self.text_changed.emit(
+                        f"[공격 탐지됨] {time_now} - DoS ({kdd_pkt_info})"
+                    )
+                # else:
+                # self.text_changed.emit(str(probe.probe_model(result.split(","))))
+                # self.text_changed.emit("DoS: " + str(dmr))
+                ##########################################
 
                 nslkdd.output_false()
 
