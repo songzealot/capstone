@@ -12,6 +12,7 @@ class IfaceSelectGUI(QDialog, form_class):
     def __init__(self, iflist):
         super().__init__()
         self.setupUi(self)
+        self.setFixedSize(960, 360)
 
         self.iface_index = None
         for a in iflist:
