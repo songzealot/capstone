@@ -73,6 +73,7 @@ class WindowClass(QMainWindow, form_class):
         self.cicstr.cic_bf_count.connect(self.cic_bf_warning.setText)
         self.cicstr.cic_ddos_count.connect(self.cic_ddos_warning.setText)
 
+        ###########################################
         # 그래프
         self.colors = ["lightcoral", "lightskyblue"]
         self.labels = ["attack", "normal"]
