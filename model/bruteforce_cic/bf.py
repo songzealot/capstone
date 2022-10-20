@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 
-model_path = os.path.dirname(os.path.realpath(__file__)) + "/BF_LSTM.h5"
+model_path = os.path.dirname(os.path.realpath(__file__)) + "/LSTM_250000.h5"
 
 model = load_model(model_path)
 
