@@ -186,7 +186,7 @@ class FlowSession(DefaultSession):
                     self.ddos_attack_count += 1
                     guim.myWindow.cicstr.setDDoSCount(self.ddos_attack_count)
                     guim.myWindow.cicstr.setResult(
-                        f"[공격 탐지됨] - DDoS ({ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]})"
+                        f"[공격 탐지됨] {datetime.datetime.now()} - DDoS ({ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]})"
                     )
                     # gui 변경 추가
                 # guim.myWindow.cicstr.setResult("DDoS: " + str(jh_result))
