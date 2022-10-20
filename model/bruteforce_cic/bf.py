@@ -17,9 +17,9 @@ def bruteForce(data):
     # data = list(map(float, data))
     # print(f"플로트: {data}")
     data = np.array(data)
-    print(data)
+    # print(data)
     data = np.reshape(data, (1, 1, 21))
-    print(data)
+    # print(data)
     model_result = model.predict(data)
     model_result = model_result.tolist()
     model_result = model_result[0][0]
