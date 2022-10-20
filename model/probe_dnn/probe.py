@@ -33,7 +33,7 @@ with open(fn_path, "r") as f:
         name, __ = line.strip()[:-1].split(":")
         feature_names.append(name)
 
-path = os.path.dirname(os.path.realpath(__file__)) + "/DNN_70000.h5"
+path = os.path.dirname(os.path.realpath(__file__)) + "/DNN_100000.h5"
 model = tf.keras.models.load_model(path)
 
 
