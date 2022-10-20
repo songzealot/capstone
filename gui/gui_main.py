@@ -2,7 +2,14 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 import os
+
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+
+import numpy as np
 
 import nsl_kdd.nsl_kdd_packet_trans as nslkdd
 import cic.sniffer as cic
@@ -23,6 +30,7 @@ class WindowClass(QMainWindow, form_class):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setFixedSize(1280, 720)
 
         self.ifacefunc = iface.Myiface()
         # print(self.ifacefunc.showIfaceList())
@@ -65,11 +73,48 @@ class WindowClass(QMainWindow, form_class):
         self.cicstr.cic_bf_count.connect(self.cic_bf_warning.setText)
         self.cicstr.cic_ddos_count.connect(self.cic_ddos_warning.setText)
 
+        # 그래프
+        self.colors = ["lightcoral", "lightskyblue"]
+        self.labels = ["attack", "normal"]
+        self.nums = [0, 0]
+
+        self.fig, self.ax = plt.subplots()
+        self.canvas = FigureCanvasQTAgg(self.fig)
+
+        self.graph_layout.addWidget(self.canvas)
+
+        self.ani = animation.FuncAnimation(
+            self.fig,
+            self.update,
+            interval=100,
+            blit=False,
+            save_count=50,
+        )
+        self.canvas.draw()
+        self.show()
+
         # 기타 gui
         self.action.setShortcut("Ctrl+I")
         self.action.triggered.connect(self.teamWindow)
         self.action_2.setShortcut("Ctrl+Q")
         self.action_2.triggered.connect(qApp.quit)
+
+    def update(self, num):
+        self.ax.clear()
+        self.ax.axis("equal")
+        self.nums[0] = int(self.kdd_dos_warning.text())
+        self.nums[1] = int(self.kdd_data_total.text()) - int(
+            self.kdd_dos_warning.text()
+        )
+        self.ax.pie(
+            self.nums,
+            labels=self.labels,
+            colors=self.colors,
+            autopct="%1.1f%%",
+            startangle=90,
+            # normalize=False,
+        )
+        # self.ax.set_title("DoS")
 
     def threadStart(self):
         self.dr_th.start()
