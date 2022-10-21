@@ -2,6 +2,7 @@ from scapy.all import *
 
 
 class Myiface:
+    # 네트워크 인터페이스 선택
     def __init__(self):
         self.ifp = InterfaceProvider()
 
