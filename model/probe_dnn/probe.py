@@ -52,21 +52,9 @@ def probe_model(data):
         if c not in cols:
             df = df.drop(c, axis=1)
 
-    # try:
-    #     df2 = label.trans(df)
-    #     prec = model.predict(df2.df)
-    #     print(prec)
-    #     threshold = 0.5
-    #     prec2 = 1 if prec[0][0] > threshold else 0
-    #     df = df.drop([0], axis=0)
-    #     return prec2
-    # except:
-    #     return 0
-
     df2 = label.trans(df)
     prec = model.predict(df2.df)
     threshold = 0.5
-    # print(f"probe: {prec[0][0]}")
     prec2 = 1 if prec[0][0] > threshold else 0
     df = df.drop([0], axis=0)
     return prec2

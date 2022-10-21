@@ -5,8 +5,13 @@ from PyQt5.QtCore import *
 
 from scapy.all import *
 
+#################################
+# 라이브러리 원본에서 일부 수정됨 #
+#################################
+
 
 def create_sniffer(input_file, input_interface, output_mode, url_model=None):
+    # cic 데이터 변환 시작
     assert (input_file is None) ^ (input_interface is None)
 
     NewFlowSession = fs.generate_session_class(output_mode, url_model)
@@ -30,25 +35,23 @@ def create_sniffer(input_file, input_interface, output_mode, url_model=None):
 
 
 class CicTest(QThread):
+    # cic 데이터 변환 스레드
     text_changed = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        self.text_changed.emit("cic packet converter start")
+        self.text_changed.emit("[알림] cic packet converter start")
         self.sniffer = create_sniffer(None, self.my_iface, "flow", None)
         self.sniffer.start()
-
-    def stop(self):
-        self.quit()
-        self.text_changed.emit("cic packet converter stop")
 
     def setIface(self, my_iface):
         self.my_iface = my_iface
 
 
 class PcktLog(QThread):
+    # 패킷 카운트, 로그 기록
     ip_count = pyqtSignal(str)
     ip_log = pyqtSignal(str)
     start_log = pyqtSignal(str)
@@ -60,7 +63,7 @@ class PcktLog(QThread):
         self.iface = iface
 
     def run(self):
-        self.start_log.emit("packet counter start")
+        self.start_log.emit("[알림] packet counter start")
         self.pcktSniff()
 
     def pcktInfo(self, pckt):

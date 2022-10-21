@@ -3,15 +3,18 @@ from PyQt5 import uic
 from PyQt5.QtCore import *
 import os
 
+# UI 파일 로드
 ui_path = os.path.dirname(os.path.realpath(__file__)) + "/iface_select.ui"
-
 form_class = uic.loadUiType(ui_path)[0]
 
 
 class IfaceSelectGUI(QDialog, form_class):
+    # 인터페이스 선택
     def __init__(self, iflist):
         super().__init__()
         self.setupUi(self)
+
+        # 페이지 크기 고정
         self.setFixedSize(960, 360)
 
         self.iface_index = None
@@ -37,9 +40,3 @@ class IfaceSelectGUI(QDialog, form_class):
 
     def getIndex(self):
         return self.iface_index
-
-
-# app = QApplication(sys.argv)
-# myWindow = IfaceSelectGUI()
-# myWindow.show()
-# app.exec_()

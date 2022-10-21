@@ -18,30 +18,20 @@ MACHINE_LEARNING_API = "http://localhost:8000/predict"
 GARBAGE_COLLECT_PACKETS = 100
 
 
+#################################
+# 라이브러리 원본에서 일부 수정됨 #
+#################################
+
+
 class FlowSession(DefaultSession):
 
     """Creates a list of network flows."""
 
     def __init__(self, *args, **kwargs):
-        ##############################
-        # while True:
-        #     self.data_type = input("데이터 형식\n1. cse-cic-ids2018\n2. 명섭\n3. 재희\n")
-        #     if (self.data_type.isdigit()) and (int(self.data_type) in range(1, 4)):
-        #         break
-        #     else:
-        #         print("유효한 값을 입력해주세요")
-        # 데이터 형식 임시 고정
-        self.data_type = 2
-        ##############################
-
         self.flows = {}
         self.csv_line = 0
         self.bf_attack_count = 0
         self.ddos_attack_count = 0
-
-        # if self.output_mode == "flow":
-        #     output = open(self.output_file, "w", newline="", encoding="utf-8")
-        #     self.csv_writer = csv.writer(output)
 
         self.packets_count = 0
 
@@ -72,12 +62,6 @@ class FlowSession(DefaultSession):
         except Exception:
             return
 
-        ########################################################################
-        # self.packets_count += 1
-        # print(self.packets_count)
-        # guim.myWindow.packetCount(self.packets_count)
-        ########################################################################
-
         # If there is no forward flow with a count of 0
         if flow is None:
             # There might be one of it in reverse
@@ -106,7 +90,7 @@ class FlowSession(DefaultSession):
                     self.flows[(packet_flow_key, count)] = flow
                     break
         elif "F" in str(packet.flags):
-            # print("분기1")
+            # 분기 1
             # If it has FIN flag then early collect flow and continue
             flow.add_packet(packet, direction)
             self.garbage_collect(packet.time)
@@ -120,7 +104,7 @@ class FlowSession(DefaultSession):
         if self.packets_count % GARBAGE_COLLECT_PACKETS == 0 or (
             flow.duration > 120 and self.output_mode == "flow"
         ):
-            # print("분기2")
+            # 분기 2
             self.garbage_collect(packet.time)
 
     def get_flows(self) -> list:
@@ -143,13 +127,7 @@ class FlowSession(DefaultSession):
                 guim.myWindow.cicstr.setTotalCount(self.csv_line)
 
                 ########################################
-                # if int(self.data_type) == 1:
-                # print("cic")
-                # data = flow.get_data()
-                # elif int(self.data_type) == 2:
-                # print("ms")
                 data_ms = flow.get_ms_data()
-                # print(data_ms)
                 ms_pkt_info = list(data_ms.values())[:5]
                 if ms_pkt_info[4] == 1:
                     ms_pkt_info[4] = "ICMP"
@@ -157,12 +135,7 @@ class FlowSession(DefaultSession):
                     ms_pkt_info[4] = "TCP"
                 elif ms_pkt_info[4] == 17:
                     ms_pkt_info[4] = "UDP"
-                # ms_pkt_info_str = f"{ms_pkt_info[4]}\t{ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]}"
-                # guim.myWindow.cicstr.ipLog(ms_pkt_info_str)
-                # print(ms_pkt_info)
                 ms_list = list(data_ms.values())[5:]
-                # print(ms_list)
-                # ms_result = bf.bruteForce(list(data_ms.values()))
                 ms_result = bf.bruteForce(ms_list)
                 if ms_result == 1:
                     self.bf_attack_count += 1
@@ -170,19 +143,9 @@ class FlowSession(DefaultSession):
                     guim.myWindow.cicstr.setResult(
                         f"[공격 탐지됨] {datetime.datetime.now()} - Brute Force ({ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]})"
                     )
-                    # gui 변경 추가
 
-                # print(type(ms_result))
-                # print(ms_result)
-
-                # elif int(self.data_type) == 3:
-                # print("jh")
                 data_jh = flow.get_jh_data()
-                # print(data_jh)
-                jh_pkt_info = list(data_jh.values())[:5]
-                # print(jh_pkt_info)
                 jh_list = list(data_jh.values())[5:]
-                # print(jh_list)
                 jh_result = ddos.ddos(jh_list)
                 if jh_result == 1:
                     self.ddos_attack_count += 1
@@ -190,26 +153,8 @@ class FlowSession(DefaultSession):
                     guim.myWindow.cicstr.setResult(
                         f"[공격 탐지됨] {datetime.datetime.now()} - DDoS ({ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]})"
                     )
-                    # gui 변경 추가
-                # guim.myWindow.cicstr.setResult("DDoS: " + str(jh_result))
-                ########################################
-                # if self.csv_line == 0:
-                # print("key 기록됨")
-                # print(data.keys())
-                # self.csv_writer.writerow(data.keys())
-
-                # print(list(data.values()))
-                # self.csv_writer.writerow(data.values())
-                # print(f"{self.csv_line}개의 데이터 기록됨")
-
-                # guim.myWindow.cicTotalCount(self.csv_line)
-
-                # guim.myWindow.logAppend(list(data.values()))
-                # guim.myWindow.cicstr.setResult(str(list(data.values())))
 
                 del self.flows[k]
-        # if not self.url_model:
-        #     print("Garbage Collection Finished. Flows = {}".format(len(self.flows)))
 
 
 def generate_session_class(output_mode, url_model):
