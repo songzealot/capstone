@@ -24,7 +24,7 @@ def ddos(data):
     model_result = model_result.tolist()
     model_result = model_result[0][0]
 
-    print(f"ddos: {model_result}")
+    # print(f"ddos: {model_result}")
 
     if (detection_standard < model_result) and (model_result <= 1):
         # print(model_result)

@@ -66,7 +66,7 @@ def probe_model(data):
     df2 = label.trans(df)
     prec = model.predict(df2.df)
     threshold = 0.5
-    print(f"probe: {prec[0][0]}")
+    # print(f"probe: {prec[0][0]}")
     prec2 = 1 if prec[0][0] > threshold else 0
     df = df.drop([0], axis=0)
     return prec2
