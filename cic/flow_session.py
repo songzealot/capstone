@@ -139,7 +139,9 @@ class FlowSession(DefaultSession):
                 or latest_time - flow.latest_timestamp > EXPIRED_UPDATE
                 or flow.duration > 90
             ):
-                data = ""
+                self.csv_line += 1
+                guim.myWindow.cicstr.setTotalCount(self.csv_line)
+                
                 ########################################
                 # if int(self.data_type) == 1:
                 # print("cic")
@@ -198,11 +200,9 @@ class FlowSession(DefaultSession):
 
                 # print(list(data.values()))
                 # self.csv_writer.writerow(data.values())
-                self.csv_line += 1
                 # print(f"{self.csv_line}개의 데이터 기록됨")
 
                 # guim.myWindow.cicTotalCount(self.csv_line)
-                guim.myWindow.cicstr.setTotalCount(self.csv_line)
 
                 # guim.myWindow.logAppend(list(data.values()))
                 # guim.myWindow.cicstr.setResult(str(list(data.values())))
