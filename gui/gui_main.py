@@ -9,16 +9,12 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 
-import numpy as np
-
 import nsl_kdd.nsl_kdd_packet_trans as nslkdd
 import cic.sniffer as cic
 from . import iface
 
 from . import iface_select
 from . import team
-
-# import main as mmm
 
 # UI파일 연결
 ui_path = os.path.dirname(os.path.realpath(__file__)) + "/main.ui"
@@ -31,6 +27,13 @@ class WindowClass(QMainWindow, form_class):
         super().__init__()
         self.setupUi(self)
         self.setFixedSize(1280, 720)
+
+        self.kdd_tot = 0
+        self.kdd_dos_w = 0
+        self.kdd_prb_w = 0
+        self.cic_tot = 0
+        self.cic_bf_w = 0
+        self.cic_ddos_w = 0
 
         self.ifacefunc = iface.Myiface()
         # print(self.ifacefunc.showIfaceList())
@@ -65,6 +68,7 @@ class WindowClass(QMainWindow, form_class):
 
         # kdd 수치 변경
         self.dr_th.count_changed.connect(self.kdd_data_total.setText)
+        self.dr_th.count_changed.connect(self.kddTotalCount)
         self.dr_th.probe_changed.connect(self.kdd_probe_warning.setText)
         self.dr_th.dos_changed.connect(self.kdd_dos_warning.setText)
 
@@ -77,7 +81,7 @@ class WindowClass(QMainWindow, form_class):
         # 그래프
         self.colors = ["lightcoral", "lightskyblue"]
         self.labels = ["attack", "normal"]
-        self.nums = [0, 0]
+        # self.nums = [0, 1]
 
         self.fig, self.ax = plt.subplots()
         self.canvas = FigureCanvasQTAgg(self.fig)
@@ -100,15 +104,26 @@ class WindowClass(QMainWindow, form_class):
         self.action_2.setShortcut("Ctrl+Q")
         self.action_2.triggered.connect(qApp.quit)
 
-    def update(self, num):
+    def update(self, frame):
         self.ax.clear()
         self.ax.axis("equal")
-        self.nums[0] = int(self.kdd_dos_warning.text())
-        self.nums[1] = int(self.kdd_data_total.text()) - int(
-            self.kdd_dos_warning.text()
-        )
+        nums=['','']
+
+        # self.nums[0] = int(self.kdd_dos_warning.text())
+        # self.nums[1] = int(self.kdd_data_total.text()) - self.nums[0]
+        a = int(self.kdd_dos_warning.text())
+        # print(int(self.kdd_data_total.text()))
+        b = int(self.kdd_data_total.text()) - a
+        if a==0 and b==0:
+            b=1
+        nums[0] =a
+        nums[1] =b
+
+        # str_num = str(num)
+        # for x in range(2):
+        #     self.nums[x]+=str_num.count(str(x))
         self.ax.pie(
-            self.nums,
+            nums,
             labels=self.labels,
             colors=self.colors,
             autopct="%1.1f%%",
@@ -128,32 +143,41 @@ class WindowClass(QMainWindow, form_class):
     #     self.cic_th.stop()
 
     def packetCount(self, count):
+        # 캡쳐된 패킷 gui 표시
         self.captured_packets.setText(str(count))
 
     def kddTotalCount(self, count):
-        self.kdd_data_total.setText(str(count))
+        # kdd 전체 변환 데이터 카운트(그래프용) 
+        # self.kdd_data_total.setText(str(count))
+        self.kdd_tot = int(count)
 
     def cicTotalCount(self, count):
-        self.cic_data_total.setText(str(count))
+        # cic 전체 변환 데이터 카운트(그래프용)
+        # self.cic_data_total.setText(str(count))
+        self.cic_tot = int(count)
 
     def logAppend(self, log_data):
+        # 로그 박스에 내용 추가
         self.log_box.append(str(log_data))
         self.log_box.verticalScrollBar().setValue(
             self.log_box.verticalScrollBar().maximum()
         )
 
     def ifaceWindow(self, iflist):
+        # 인터페이스 선택 화면 출력
         ifwindow = iface_select.IfaceSelectGUI(iflist)
         ifwindow.exec_()
         self.iface_selected = ifwindow.iface_index
         # print(ifwindow.iface_index)
 
     def teamWindow(self):
+        # 팀 소개 화면 출력
         team_about = team.TeamGUI()
         team_about.exec_()
 
 
 class CicStr(QObject):
+    # cic 데이터 gui 표시
     cic_result = pyqtSignal(str)
     cic_count = pyqtSignal(str)
     cic_bf_count = pyqtSignal(str)
@@ -161,9 +185,11 @@ class CicStr(QObject):
     cic_ip_log = pyqtSignal(str)
 
     def setResult(self, result):
+        # 공격 탐지 로그 표시
         self.cic_result.emit(result)
 
     def setTotalCount(self, count):
+        # cic 전체 변환 데이터 gui 표시
         self.cic_count.emit(str(count))
 
     def setBFCount(self, count):
