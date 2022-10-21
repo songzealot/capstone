@@ -79,7 +79,7 @@ class WindowClass(QMainWindow, form_class):
 
         #############################################################################
         #############################################################################
-        # 그래프 정보
+        # 기본 그래프 정보
         self.colors = ["lightcoral", "lightskyblue"]
         self.labels = ["attack", "normal"]
 
@@ -88,7 +88,7 @@ class WindowClass(QMainWindow, form_class):
         self.canvas_dos = FigureCanvasQTAgg(self.fig_dos)
 
         self.graph_layout.addWidget(self.canvas_dos)
-        self.ani = animation.FuncAnimation(
+        self.ani_dos = animation.FuncAnimation(
             self.fig_dos,
             self.update_dos,
             interval=100,
@@ -96,6 +96,49 @@ class WindowClass(QMainWindow, form_class):
             save_count=50,
         )
         self.canvas_dos.draw()
+
+        # Probe 그래프
+        self.fig_prb, self.ax_prb = plt.subplots()
+        self.canvas_prb = FigureCanvasQTAgg(self.fig_prb)
+
+        self.graph_layout.addWidget(self.canvas_prb)
+        self.ani_prb = animation.FuncAnimation(
+            self.fig_prb,
+            self.update_prb,
+            interval=100,
+            blit=False,
+            save_count=50,
+        )
+        self.canvas_prb.draw()
+
+        # Brute Foce 그래프
+        self.fig_bf, self.ax_bf = plt.subplots()
+        self.canvas_bf = FigureCanvasQTAgg(self.fig_bf)
+
+        self.graph_layout.addWidget(self.canvas_bf)
+        self.ani_bf = animation.FuncAnimation(
+            self.fig_bf,
+            self.update_bf,
+            interval=100,
+            blit=False,
+            save_count=50,
+        )
+        self.canvas_bf.draw()
+
+        # DDoS 그래프
+        self.fig_ddos, self.ax_ddos = plt.subplots()
+        self.canvas_ddos = FigureCanvasQTAgg(self.fig_ddos)
+
+        self.graph_layout.addWidget(self.canvas_ddos)
+        self.ani_ddos = animation.FuncAnimation(
+            self.fig_ddos,
+            self.update_ddos,
+            interval=100,
+            blit=False,
+            save_count=50,
+        )
+        self.canvas_ddos.draw()
+
         self.show()
 
         # 기타 gui
@@ -124,6 +167,69 @@ class WindowClass(QMainWindow, form_class):
             startangle=90
         )
         self.ax_dos.set_title("DoS")
+
+    def update_prb(self,frame):
+        self.ax_prb.clear()
+        self.ax_prb.axis("equal")
+        nums=['','']
+
+        a = int(self.kdd_probe_warning.text())
+        b = int(self.kdd_data_total.text()) - a
+        if a==0 and b==0:
+            b=1
+        nums[0] =a
+        nums[1] =b
+
+        self.ax_prb.pie(
+            nums,
+            labels=self.labels,
+            colors=self.colors,
+            autopct="%1.1f%%",
+            startangle=90
+        )
+        self.ax_prb.set_title("Probe")
+
+    def update_bf(self,frame):
+        self.ax_bf.clear()
+        self.ax_bf.axis("equal")
+        nums=['','']
+
+        a = int(self.cic_bf_warning.text())
+        b = int(self.cic_data_total.text()) - a
+        if a==0 and b==0:
+            b=1
+        nums[0] =a
+        nums[1] =b
+
+        self.ax_bf.pie(
+            nums,
+            labels=self.labels,
+            colors=self.colors,
+            autopct="%1.1f%%",
+            startangle=90
+        )
+        self.ax_bf.set_title("Brute Force")
+
+    def update_ddos(self,frame):
+        self.ax_ddos.clear()
+        self.ax_ddos.axis("equal")
+        nums=['','']
+
+        a = int(self.cic_ddos_warning.text())
+        b = int(self.cic_data_total.text()) - a
+        if a==0 and b==0:
+            b=1
+        nums[0] =a
+        nums[1] =b
+
+        self.ax_ddos.pie(
+            nums,
+            labels=self.labels,
+            colors=self.colors,
+            autopct="%1.1f%%",
+            startangle=90
+        )
+        self.ax_ddos.set_title("DDoS")
 
     def threadStart(self):
         self.dr_th.start()
