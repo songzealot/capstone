@@ -77,25 +77,25 @@ class WindowClass(QMainWindow, form_class):
         self.cicstr.cic_bf_count.connect(self.cic_bf_warning.setText)
         self.cicstr.cic_ddos_count.connect(self.cic_ddos_warning.setText)
 
-        ###########################################
-        # 그래프
+        #############################################################################
+        #############################################################################
+        # 그래프 정보
         self.colors = ["lightcoral", "lightskyblue"]
         self.labels = ["attack", "normal"]
-        # self.nums = [0, 1]
 
-        self.fig, self.ax = plt.subplots()
-        self.canvas = FigureCanvasQTAgg(self.fig)
+        # DoS 그래프
+        self.fig_dos, self.ax_dos = plt.subplots()
+        self.canvas_dos = FigureCanvasQTAgg(self.fig_dos)
 
-        self.graph_layout.addWidget(self.canvas)
-
+        self.graph_layout.addWidget(self.canvas_dos)
         self.ani = animation.FuncAnimation(
-            self.fig,
-            self.update,
+            self.fig_dos,
+            self.update_dos,
             interval=100,
             blit=False,
             save_count=50,
         )
-        self.canvas.draw()
+        self.canvas_dos.draw()
         self.show()
 
         # 기타 gui
@@ -104,33 +104,26 @@ class WindowClass(QMainWindow, form_class):
         self.action_2.setShortcut("Ctrl+Q")
         self.action_2.triggered.connect(qApp.quit)
 
-    def update(self, frame):
-        self.ax.clear()
-        self.ax.axis("equal")
+    def update_dos(self,frame):
+        self.ax_dos.clear()
+        self.ax_dos.axis("equal")
         nums=['','']
 
-        # self.nums[0] = int(self.kdd_dos_warning.text())
-        # self.nums[1] = int(self.kdd_data_total.text()) - self.nums[0]
         a = int(self.kdd_dos_warning.text())
-        # print(int(self.kdd_data_total.text()))
         b = int(self.kdd_data_total.text()) - a
         if a==0 and b==0:
             b=1
         nums[0] =a
         nums[1] =b
 
-        # str_num = str(num)
-        # for x in range(2):
-        #     self.nums[x]+=str_num.count(str(x))
-        self.ax.pie(
+        self.ax_dos.pie(
             nums,
             labels=self.labels,
             colors=self.colors,
             autopct="%1.1f%%",
-            startangle=90,
-            # normalize=False,
+            startangle=90
         )
-        # self.ax.set_title("DoS")
+        self.ax_dos.set_title("DoS")
 
     def threadStart(self):
         self.dr_th.start()
