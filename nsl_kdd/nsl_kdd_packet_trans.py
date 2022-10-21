@@ -58,10 +58,9 @@ class DataReceiver(QThread):
                 # print(result_list[:-5])
                 # print(result_list[-5:])
                 kdd_pkt_info = f"{result_list[-5]}:{result_list[-4]} -> {result_list[-3]}:{result_list[-2]}"
-                #
                 time_now = datetime.datetime.now()
 
-                self.ip_log.emit(str(f"{str(result_list[1]).upper()}\t{kdd_pkt_info}"))
+                # self.ip_log.emit(str(f"{str(result_list[1]).upper()}\t{kdd_pkt_info}"))
 
                 ##########################################
                 pmr = probe.probe_model(result_list[:-5])

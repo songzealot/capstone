@@ -72,10 +72,10 @@ class FlowSession(DefaultSession):
         except Exception:
             return
 
-        self.packets_count += 1
         ########################################################################
+        # self.packets_count += 1
         # print(self.packets_count)
-        guim.myWindow.packetCount(self.packets_count)
+        # guim.myWindow.packetCount(self.packets_count)
         ########################################################################
 
         # If there is no forward flow with a count of 0
@@ -141,7 +141,7 @@ class FlowSession(DefaultSession):
             ):
                 self.csv_line += 1
                 guim.myWindow.cicstr.setTotalCount(self.csv_line)
-                
+
                 ########################################
                 # if int(self.data_type) == 1:
                 # print("cic")
@@ -157,8 +157,8 @@ class FlowSession(DefaultSession):
                     ms_pkt_info[4] = "TCP"
                 elif ms_pkt_info[4] == 17:
                     ms_pkt_info[4] = "UDP"
-                ms_pkt_info_str = f"{ms_pkt_info[4]}\t{ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]}"
-                guim.myWindow.cicstr.ipLog(ms_pkt_info_str)
+                # ms_pkt_info_str = f"{ms_pkt_info[4]}\t{ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]}"
+                # guim.myWindow.cicstr.ipLog(ms_pkt_info_str)
                 # print(ms_pkt_info)
                 ms_list = list(data_ms.values())[5:]
                 # print(ms_list)

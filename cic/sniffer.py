@@ -1,9 +1,9 @@
 from scapy.sendrecv import AsyncSniffer
 
-# from .flow_session import generate_session_class
-# from .flow_session import generate_session_class
 from . import flow_session as fs
 from PyQt5.QtCore import *
+
+from scapy.all import *
 
 
 def create_sniffer(input_file, input_interface, output_mode, url_model=None):
@@ -29,7 +29,7 @@ def create_sniffer(input_file, input_interface, output_mode, url_model=None):
         )
 
 
-class cicTest(QThread):
+class CicTest(QThread):
     text_changed = pyqtSignal(str)
 
     def __init__(self):
@@ -39,7 +39,6 @@ class cicTest(QThread):
         self.text_changed.emit("cic packet converter start")
         self.sniffer = create_sniffer(None, self.my_iface, "flow", None)
         self.sniffer.start()
-        # print("cic packet converter start")
 
     def stop(self):
         self.quit()
@@ -49,69 +48,32 @@ class cicTest(QThread):
         self.my_iface = my_iface
 
 
-# def main():
-#     parser = argparse.ArgumentParser()
+class PcktLog(QThread):
+    ip_count = pyqtSignal(str)
+    ip_log = pyqtSignal(str)
+    start_log = pyqtSignal(str)
+    protocols = {1: "ICMP", 6: "TCP", 17: "UDP"}
+    count = 0
 
-#     input_group = parser.add_mutually_exclusive_group(required=True)
-#     input_group.add_argument(
-#         "-i",
-#         "--interface",
-#         action="store",
-#         dest="input_interface",
-#         help="capture online data from INPUT_INTERFACE",
-#     )
+    def __init__(self, iface):
+        super().__init__()
+        self.iface = iface
 
-#     input_group.add_argument(
-#         "-f",
-#         "--file",
-#         action="store",
-#         dest="input_file",
-#         help="capture offline data from INPUT_FILE",
-#     )
+    def run(self):
+        self.start_log.emit("packet counter start")
+        self.pcktSniff()
 
-#     output_group = parser.add_mutually_exclusive_group(required=False)
-#     output_group.add_argument(
-#         "-c",
-#         "--csv",
-#         "--flow",
-#         action="store_const",
-#         const="flow",
-#         dest="output_mode",
-#         help="output flows as csv",
-#     )
+    def pcktInfo(self, pckt):
+        self.count += 1
+        src_ip = pckt[0][1].src
+        src_port = pckt[0][2].sport
+        dst_ip = pckt[0][1].dst
+        dst_port = pckt[0][2].dport
+        proto = pckt[0][1].proto
 
-#     url_model = parser.add_mutually_exclusive_group(required=False)
-#     url_model.add_argument(
-#         "-u",
-#         "--url",
-#         action="store",
-#         dest="url_model",
-#         help="URL endpoint for send to Machine Learning Model. e.g http://0.0.0.0:80/prediction",
-#     )
+        info = f"{self.protocols[proto]}\t{src_ip}:{src_port} -> {dst_ip}:{dst_port}"
+        self.ip_count.emit(str(self.count))
+        self.ip_log.emit(info)
 
-#     parser.add_argument(
-#         "output",
-#         help="output file name (in flow mode) or directory (in sequence mode)",
-#     )
-
-#     args = parser.parse_args()
-
-#     sniffer = create_sniffer(
-#         args.input_file,
-#         args.input_interface,
-#         args.output_mode,
-#         args.output,
-#         args.url_model,
-#     )
-#     sniffer.start()
-
-#     try:
-#         sniffer.join()
-#     except KeyboardInterrupt:
-#         sniffer.stop()
-#     finally:
-#         sniffer.join()
-
-
-# if __name__ == "__main__":
-#     main()
+    def pcktSniff(self):
+        sniff(filter="ip", prn=self.pcktInfo, count=0, iface=self.iface)

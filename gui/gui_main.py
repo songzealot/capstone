@@ -48,10 +48,16 @@ class WindowClass(QMainWindow, form_class):
         print(f"{iface_name} 선택됨")
         self.selected_network.setText(str(iface_name))
 
+        # 패킷 카운트
+        self.pckt_log = cic.PcktLog(iface_name)
+        self.pckt_log.ip_count.connect(self.captured_packets.setText)
+        self.pckt_log.ip_log.connect(self.ip_log_box.append)
+        self.pckt_log.start_log.connect(self.log_box.append)
+
         # nslkdd, cic 패킷 캡쳐-데이터 특징 생성 스레드
         self.dr_th = nslkdd.DataReceiver()
         self.pkc_th = nslkdd.PacketCapture()
-        self.cic_th = cic.cicTest()
+        self.cic_th = cic.CicTest()
 
         # nslkdd, cic 스레드의 네트워크 인터페이스 설정
         self.pkc_th.setDevName(self.ifacefunc.getIfaceDev())
@@ -63,8 +69,8 @@ class WindowClass(QMainWindow, form_class):
         self.cic_th.text_changed.connect(self.log_box.append)
         self.dr_th.text_changed.connect(self.log_box.append)
         self.pkc_th.text_changed.connect(self.log_box.append)
-        self.cicstr.cic_ip_log.connect(self.ip_log_box.append)
-        self.dr_th.ip_log.connect(self.ip_log_box.append)
+        # self.cicstr.cic_ip_log.connect(self.ip_log_box.append)
+        # self.dr_th.ip_log.connect(self.ip_log_box.append)
 
         # kdd 수치 변경
         self.dr_th.count_changed.connect(self.kdd_data_total.setText)
@@ -80,7 +86,7 @@ class WindowClass(QMainWindow, form_class):
         #############################################################################
         #############################################################################
         # 기본 그래프 정보
-        self.colors = ["lightcoral", "lightskyblue"]
+        self.colors = ["red", "green"]
         self.labels = ["attack", "normal"]
 
         # DoS 그래프
@@ -147,87 +153,87 @@ class WindowClass(QMainWindow, form_class):
         self.action_2.setShortcut("Ctrl+Q")
         self.action_2.triggered.connect(qApp.quit)
 
-    def update_dos(self,frame):
+    def update_dos(self, frame):
         self.ax_dos.clear()
         self.ax_dos.axis("equal")
-        nums=['','']
+        nums = ["", ""]
 
         a = int(self.kdd_dos_warning.text())
         b = int(self.kdd_data_total.text()) - a
-        if a==0 and b==0:
-            b=1
-        nums[0] =a
-        nums[1] =b
+        if a == 0 and b == 0:
+            b = 1
+        nums[0] = a
+        nums[1] = b
 
         self.ax_dos.pie(
             nums,
             labels=self.labels,
             colors=self.colors,
             autopct="%1.1f%%",
-            startangle=90
+            startangle=90,
         )
         self.ax_dos.set_title("DoS")
 
-    def update_prb(self,frame):
+    def update_prb(self, frame):
         self.ax_prb.clear()
         self.ax_prb.axis("equal")
-        nums=['','']
+        nums = ["", ""]
 
         a = int(self.kdd_probe_warning.text())
         b = int(self.kdd_data_total.text()) - a
-        if a==0 and b==0:
-            b=1
-        nums[0] =a
-        nums[1] =b
+        if a == 0 and b == 0:
+            b = 1
+        nums[0] = a
+        nums[1] = b
 
         self.ax_prb.pie(
             nums,
             labels=self.labels,
             colors=self.colors,
             autopct="%1.1f%%",
-            startangle=90
+            startangle=90,
         )
         self.ax_prb.set_title("Probe")
 
-    def update_bf(self,frame):
+    def update_bf(self, frame):
         self.ax_bf.clear()
         self.ax_bf.axis("equal")
-        nums=['','']
+        nums = ["", ""]
 
         a = int(self.cic_bf_warning.text())
         b = int(self.cic_data_total.text()) - a
-        if a==0 and b==0:
-            b=1
-        nums[0] =a
-        nums[1] =b
+        if a == 0 and b == 0:
+            b = 1
+        nums[0] = a
+        nums[1] = b
 
         self.ax_bf.pie(
             nums,
             labels=self.labels,
             colors=self.colors,
             autopct="%1.1f%%",
-            startangle=90
+            startangle=90,
         )
         self.ax_bf.set_title("Brute Force")
 
-    def update_ddos(self,frame):
+    def update_ddos(self, frame):
         self.ax_ddos.clear()
         self.ax_ddos.axis("equal")
-        nums=['','']
+        nums = ["", ""]
 
         a = int(self.cic_ddos_warning.text())
         b = int(self.cic_data_total.text()) - a
-        if a==0 and b==0:
-            b=1
-        nums[0] =a
-        nums[1] =b
+        if a == 0 and b == 0:
+            b = 1
+        nums[0] = a
+        nums[1] = b
 
         self.ax_ddos.pie(
             nums,
             labels=self.labels,
             colors=self.colors,
             autopct="%1.1f%%",
-            startangle=90
+            startangle=90,
         )
         self.ax_ddos.set_title("DDoS")
 
@@ -235,18 +241,19 @@ class WindowClass(QMainWindow, form_class):
         self.dr_th.start()
         self.pkc_th.start()
         self.cic_th.start()
+        self.pckt_log.start()
 
     # def buttonStop(self):
     #     self.pkc_th.stop()
     #     self.dr_th.stop()
     #     self.cic_th.stop()
 
-    def packetCount(self, count):
-        # 캡쳐된 패킷 gui 표시
-        self.captured_packets.setText(str(count))
+    # def packetCount(self, count):
+    # 캡쳐된 패킷 gui 표시
+    # self.captured_packets.setText(str(count))
 
     def kddTotalCount(self, count):
-        # kdd 전체 변환 데이터 카운트(그래프용) 
+        # kdd 전체 변환 데이터 카운트(그래프용)
         # self.kdd_data_total.setText(str(count))
         self.kdd_tot = int(count)
 
