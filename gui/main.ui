@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ㅁㄴㅇㄹ</string>
+   <string>isDogu</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -129,7 +129,7 @@
         <x>10</x>
         <y>90</y>
         <width>611</width>
-        <height>321</height>
+        <height>251</height>
        </rect>
       </property>
       <property name="font">
@@ -168,7 +168,7 @@
        <property name="geometry">
         <rect>
          <x>340</x>
-         <y>220</y>
+         <y>180</y>
          <width>201</width>
          <height>31</height>
         </rect>
@@ -203,14 +203,14 @@
         </font>
        </property>
        <property name="text">
-        <string>분석된 데이터</string>
+        <string>분석된 데이터 수</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>140</y>
+         <y>120</y>
          <width>321</width>
          <height>31</height>
         </rect>
@@ -231,7 +231,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>220</y>
+         <y>180</y>
          <width>301</width>
          <height>31</height>
         </rect>
@@ -252,7 +252,7 @@
        <property name="geometry">
         <rect>
          <x>340</x>
-         <y>140</y>
+         <y>120</y>
          <width>201</width>
          <height>31</height>
         </rect>
@@ -276,7 +276,7 @@
         <x>630</x>
         <y>90</y>
         <width>611</width>
-        <height>321</height>
+        <height>251</height>
        </rect>
       </property>
       <property name="font">
@@ -315,7 +315,7 @@
        <property name="geometry">
         <rect>
          <x>340</x>
-         <y>140</y>
+         <y>120</y>
          <width>201</width>
          <height>31</height>
         </rect>
@@ -336,7 +336,7 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>140</y>
+         <y>120</y>
          <width>311</width>
          <height>31</height>
         </rect>
@@ -371,14 +371,14 @@
         </font>
        </property>
        <property name="text">
-        <string>분석된 데이터</string>
+        <string>분석된 데이터 수</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_6">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>220</y>
+         <y>180</y>
          <width>311</width>
          <height>31</height>
         </rect>
@@ -399,7 +399,7 @@
        <property name="geometry">
         <rect>
          <x>340</x>
-         <y>220</y>
+         <y>180</y>
          <width>201</width>
          <height>31</height>
         </rect>
@@ -425,9 +425,9 @@
      <widget class="QTextBrowser" name="log_box">
       <property name="geometry">
        <rect>
-        <x>450</x>
+        <x>470</x>
         <y>50</y>
-        <width>801</width>
+        <width>781</width>
         <height>281</height>
        </rect>
       </property>
@@ -440,7 +440,7 @@
        <rect>
         <x>10</x>
         <y>50</y>
-        <width>421</width>
+        <width>441</width>
         <height>281</height>
        </rect>
       </property>
@@ -469,7 +469,7 @@
      <widget class="QLabel" name="label_8">
       <property name="geometry">
        <rect>
-        <x>460</x>
+        <x>480</x>
         <y>10</y>
         <width>261</width>
         <height>31</height>
@@ -499,6 +499,25 @@
      </rect>
     </property>
     <layout class="QHBoxLayout" name="graph_layout"/>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>1030</x>
+      <y>5</y>
+      <width>231</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>맑은 고딕</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>NIDS with A.I. - made by Dogu</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
