@@ -253,8 +253,7 @@ class WindowClass(QMainWindow, form_class):
         # 인터페이스 선택 화면 출력
         ifwindow = iface_select.IfaceSelectGUI(iflist)
         ifwindow.exec_()
-        self.iface_selected = ifwindow.iface_index
-        # print(ifwindow.iface_index)
+        self.iface_selected = ifwindow.getIndex()
 
     def teamWindow(self):
         # 팀 소개 화면 출력
