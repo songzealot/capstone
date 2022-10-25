@@ -503,9 +503,9 @@
    <widget class="QLabel" name="label_9">
     <property name="geometry">
      <rect>
-      <x>1030</x>
+      <x>980</x>
       <y>5</y>
-      <width>231</width>
+      <width>281</width>
       <height>21</height>
      </rect>
     </property>
@@ -516,7 +516,7 @@
      </font>
     </property>
     <property name="text">
-     <string>NIDS with A.I. - made by Dogu</string>
+     <string>NIDS with A.I. - Made by Team Dogu</string>
     </property>
    </widget>
   </widget>

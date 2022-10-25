@@ -21,7 +21,7 @@ class TeamGUI(QDialog, form_class):
         self.setupUi(self)
 
         # 페이지 크기 고정
-        self.setFixedSize(400, 400)
+        self.setFixedSize(400, 430)
 
         # 팀 로고 표시
         self.team_logo.setPixmap(QtGui.QPixmap(logo_path))
