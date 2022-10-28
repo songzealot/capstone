@@ -24,6 +24,7 @@ class IfaceSelectGUI(QDialog, form_class):
         self.listWidget.itemDoubleClicked.connect(self.setIndex)
 
     def setIndex(self):
+        # 인터페이스 설정
         row = self.listWidget.currentRow()
         for i in range(row, -1, -1):
             item_split = list(filter(None, self.listWidget.item(i).text().split(" ")))
@@ -39,4 +40,5 @@ class IfaceSelectGUI(QDialog, form_class):
         QCoreApplication.instance().quit()
 
     def getIndex(self):
+        # 설정된 인터페이스 반환
         return self.iface_index

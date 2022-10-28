@@ -24,9 +24,8 @@ cols = [
     "dst_host_rerror_rate",
     "dst_host_srv_rerror_rate",
 ]
-
+# 모델 로드
 feature_names = []
-
 fn_path = os.path.dirname(os.path.realpath(__file__)) + "/Field_Names.txt"
 with open(fn_path, "r") as f:
     for line in f.readlines()[0:]:
@@ -38,6 +37,7 @@ model = tf.keras.models.load_model(path)
 
 
 def probe_model(data):
+    # Probe 모델
     df = pd.DataFrame(columns=feature_names)
     if isinstance(data, list):
         df.loc[0] = data

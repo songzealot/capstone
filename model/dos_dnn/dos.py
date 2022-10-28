@@ -3,8 +3,8 @@ import pandas as pd
 import model.probe_dnn.label as label
 import os
 
+# 모델 로드
 feature_names = []
-
 fn_path = os.path.dirname(os.path.realpath(__file__)) + "/Field_Names.txt"
 with open(fn_path, "r") as f:
     for line in f.readlines()[0:]:
@@ -16,6 +16,7 @@ model = tf.keras.models.load_model(path)
 
 
 def dos_model(data):
+    # DoS 모델
     df = pd.DataFrame(columns=feature_names)
     if isinstance(data, list):
         df.loc[0] = data
