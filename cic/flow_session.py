@@ -123,20 +123,25 @@ class FlowSession(DefaultSession):
                 or latest_time - flow.latest_timestamp > EXPIRED_UPDATE
                 or flow.duration > 90
             ):
+
+                ########################################
+                # 분석 결과
+                data_ms = flow.get_ms_data()
+                ms_list = list(data_ms.values())[5:]
+                ms_result = bf.bruteForce(ms_list)
+
+                data_jh = flow.get_jh_data()
+                jh_list = list(data_jh.values())[5:]
+                jh_result = ddos.ddos(jh_list)
+
+                # gui 표시
                 self.csv_line += 1
                 guim.myWindow.cicstr.setTotalCount(self.csv_line)
 
-                ########################################
-                data_ms = flow.get_ms_data()
+                # ip 정보
                 ms_pkt_info = list(data_ms.values())[:5]
-                if ms_pkt_info[4] == 1:
-                    ms_pkt_info[4] = "ICMP"
-                elif ms_pkt_info[4] == 6:
-                    ms_pkt_info[4] = "TCP"
-                elif ms_pkt_info[4] == 17:
-                    ms_pkt_info[4] = "UDP"
-                ms_list = list(data_ms.values())[5:]
-                ms_result = bf.bruteForce(ms_list)
+
+                # gui 표시
                 if ms_result == 1:
                     self.bf_attack_count += 1
                     guim.myWindow.cicstr.setBFCount(self.bf_attack_count)
@@ -144,9 +149,6 @@ class FlowSession(DefaultSession):
                         f"[공격 탐지됨] {datetime.datetime.now()} - Brute Force ({ms_pkt_info[0]}:{ms_pkt_info[2]} -> {ms_pkt_info[1]}:{ms_pkt_info[3]})"
                     )
 
-                data_jh = flow.get_jh_data()
-                jh_list = list(data_jh.values())[5:]
-                jh_result = ddos.ddos(jh_list)
                 if jh_result == 1:
                     self.ddos_attack_count += 1
                     guim.myWindow.cicstr.setDDoSCount(self.ddos_attack_count)
