@@ -55,7 +55,18 @@ class PcktLog(QThread):
     ip_count = pyqtSignal(str)
     ip_log = pyqtSignal(str)
     start_log = pyqtSignal(str)
-    protocols = {1: "ICMP", 6: "TCP", 17: "UDP"}
+    protocols = {
+        1: "ICMP",
+        2: "IGMP",
+        3: "GGP",
+        4: "IPv4",
+        5: "ST",
+        6: "TCP",
+        7: "CBT",
+        8: "EGP",
+        9: "IGP",
+        17: "UDP",
+    }
     count = 0
 
     def __init__(self, iface):
@@ -73,14 +84,14 @@ class PcktLog(QThread):
         dst_ip = pckt[0][1].dst
         proto = pckt[0][1].proto
 
-        if pckt[0][1].proto == 1:
-            info = f"{self.protocols[proto]}\t{src_ip} -> {dst_ip}"
-        else:
+        if pckt[0][1].proto == 6 or pckt[0][1].proto == 17:
             src_port = pckt[0][2].sport
             dst_port = pckt[0][2].dport
             info = (
                 f"{self.protocols[proto]}\t{src_ip}:{src_port} -> {dst_ip}:{dst_port}"
             )
+        elif pckt[0][1].proto:
+            info = f"{self.protocols[proto]}\t{src_ip} -> {dst_ip}"
 
         self.ip_count.emit(str(self.count))
         self.ip_log.emit(info)
