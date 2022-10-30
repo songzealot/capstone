@@ -67,14 +67,21 @@ class PcktLog(QThread):
         self.pcktSniff()
 
     def pcktInfo(self, pckt):
+        # 패킷 정보 기록
         self.count += 1
         src_ip = pckt[0][1].src
-        src_port = pckt[0][2].sport
         dst_ip = pckt[0][1].dst
-        dst_port = pckt[0][2].dport
         proto = pckt[0][1].proto
 
-        info = f"{self.protocols[proto]}\t{src_ip}:{src_port} -> {dst_ip}:{dst_port}"
+        if pckt[0][1].proto == 1:
+            info = f"{self.protocols[proto]}\t{src_ip} -> {dst_ip}"
+        else:
+            src_port = pckt[0][2].sport
+            dst_port = pckt[0][2].dport
+            info = (
+                f"{self.protocols[proto]}\t{src_ip}:{src_port} -> {dst_ip}:{dst_port}"
+            )
+
         self.ip_count.emit(str(self.count))
         self.ip_log.emit(info)
 
