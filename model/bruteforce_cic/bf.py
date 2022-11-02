@@ -16,7 +16,7 @@ def bruteForce(data):
     # Brute Force 모델
     data = np.array(data)
     data = np.reshape(data, (1, 1, 21))
-    model_result = model.predict(data)
+    model_result = model.predict(data, verbose=0)
     model_result = model_result.tolist()
     model_result = model_result[0][0]
 

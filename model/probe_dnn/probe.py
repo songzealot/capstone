@@ -2,6 +2,8 @@ import tensorflow as tf
 import pandas as pd
 import model.probe_dnn.label as label
 import os
+from sklearn.preprocessing import LabelEncoder
+le=LabelEncoder()
 
 cols = [
     "duration",
@@ -32,7 +34,7 @@ with open(fn_path, "r") as f:
         name, __ = line.strip()[:-1].split(":")
         feature_names.append(name)
 
-path = os.path.dirname(os.path.realpath(__file__)) + "/DNN_150000.h5"
+path = os.path.dirname(os.path.realpath(__file__)) + "/models/DNN_300000.h5"
 model = tf.keras.models.load_model(path)
 
 
@@ -52,9 +54,12 @@ def probe_model(data):
         if c not in cols:
             df = df.drop(c, axis=1)
 
-    df2 = label.trans(df)
-    prec = model.predict(df2.df)
-    threshold = 0.5
+    #df2 = label.trans(df)
+    df['protocol_type']=le.fit_transform(df['protocol_type'])
+    df['service']=le.fit_transform(df['service'])
+    df['flag']=le.fit_transform(df['flag'])
+    prec = model.predict(df,verbose=0)
+    threshold = 0.9
     prec2 = 1 if prec[0][0] > threshold else 0
     df = df.drop([0], axis=0)
     return prec2

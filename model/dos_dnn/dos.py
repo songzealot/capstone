@@ -28,8 +28,8 @@ def dos_model(data):
         return
 
     df2 = label.trans(df)
-    prec = model.predict(df2.df)
-    threshold = 0.5
+    prec = model.predict(df2.df, verbose=0)
+    threshold = 0.9
     prec2 = 1 if prec[0][0] > threshold else 0
     df = df.drop([0], axis=0)
     return prec2
